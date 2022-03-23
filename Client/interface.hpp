@@ -6,4 +6,11 @@
 
 void accounting();
 
+void login();
+void register_();
+
+bool dash();
+
+
+
 #endif
