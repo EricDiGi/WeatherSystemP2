@@ -5,6 +5,10 @@
 .vscode
 .VSCodeCounter
 
+# Execs
+server
+client
+
 # Compiled Object files
 *.slo
 *.lo
