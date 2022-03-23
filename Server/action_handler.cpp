@@ -22,6 +22,8 @@ Handler::Handler(std::string buffer){
 
     if(this->cmd == "L")
         login_auth(func_ops[0],func_ops[1]);
+    else if(this->cmd == "R")
+        register_user(func_ops[0], func_ops[1]);
     else
         this->out = "This is text :)";
 }

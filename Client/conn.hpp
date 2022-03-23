@@ -14,12 +14,12 @@
 #define PORT 60049
 #define DATA_LEN 1280
 
-
 extern struct sockaddr_in localSock;
 extern struct ip_mreq group;
 
 extern int client_fd;
 extern char buffer[DATA_LEN];
+
 std::string read();
 bool send(std::string content);
 
