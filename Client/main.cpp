@@ -11,6 +11,9 @@
 #include <vector>
 #include <algorithm>
 
+#include "interface.hpp"
+#include "conn.hpp"
+
 #define PORT 60049
 #define DATA_LEN 1280
 
@@ -20,7 +23,6 @@ struct sockaddr_in localSock;
 struct ip_mreq group;
 
 int client_fd;
-char buffer[DATA_LEN];
 
 int main(int argc, char** argv){
     if((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0){
@@ -45,4 +47,7 @@ int main(int argc, char** argv){
         exit(EXIT_FAILURE);
     } else printf("Socket ... OK ...\n");
 
+    while(1){
+        accounting();
+    }
 }

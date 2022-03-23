@@ -6,7 +6,7 @@ OBJECTS = $(SRCS: .hpp=.o)
 
 all: clean client
 
-client: $(OBJECTS) main.cpp
+client: $(OBJECTS) main.cpp interface.hpp interface.cpp conn.hpp
 		$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:

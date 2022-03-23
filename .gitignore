@@ -6,8 +6,8 @@
 .VSCodeCounter
 
 # Execs
-server
-client
+Server/server
+Client/client
 
 # Compiled Object files
 *.slo
