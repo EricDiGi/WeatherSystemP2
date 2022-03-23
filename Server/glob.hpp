@@ -2,8 +2,10 @@
 #define GLOB_HPP
 
 #include <vector>
+#include <mutex>
 #include "location.hpp"
 
-std::vector<Location> locats;
+extern std::mutex lock;
+extern std::vector<Location> locats;
 
 #endif

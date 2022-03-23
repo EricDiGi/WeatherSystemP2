@@ -1,5 +1,5 @@
-#ifndef SERVICE_THREAD
-#define SERVICE_THREAD
+#ifndef SERVICE_THREAD_HPP
+#define SERVICE_THREAD_HPP
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,12 +13,14 @@
 #include <fstream>
 #include <sstream>
 
+#include "action_handler.hpp"
 #include "glob.hpp"
 
 #define NUM_THREADS 4
 #define PORT 60049
 #define BUFFER_LEN 1280
 
+std::vector<Location> locats;
 std::mutex lock;
 
 struct new_user{
@@ -27,6 +29,9 @@ struct new_user{
 };
 
 int active_threads = 0;
+
+void serve(struct new_user* user);
+void build();
 
 void serve(struct new_user* user){
 	lock.lock();
@@ -41,8 +46,7 @@ void serve(struct new_user* user){
 
 	while(1){
 		if(read(sock, buffer, BUFFER_LEN) > 0){
-            std::string packet = "This is a packet";
-			//std::string packet = packet_util(buffer).http_response();
+			std::string packet = Handler(buffer).act();
 			printf("THREAD: %d\n", id_);
 			write(sock, (char*)packet.c_str(), (int)packet.size());
 			printf("---------- MESSAGE SENT -----------\n");
@@ -68,9 +72,9 @@ void build(){
 		fs.close();
 	}
 	else{
-		perror("Unable to load locations");
-		exit(EXIT_FAILURE);
-	}
+        perror("Unable to load locations");
+        exit(EXIT_FAILURE);
+    }
 
 	std::string tmp;
 	while(getline(dbuf,tmp,'\n')){

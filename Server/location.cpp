@@ -4,6 +4,6 @@ Location::Location(std::string name){
     this->name = name;
 }
 
-std::string Location::Location(){
+std::string Location::getName(){
     return this->name;
 }
