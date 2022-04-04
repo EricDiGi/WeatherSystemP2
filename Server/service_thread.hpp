@@ -21,6 +21,9 @@
 #define BUFFER_LEN 1280
 
 std::vector<Location> locats;
+std::vector<User> accs;
+std::vector<User*> active_users;
+
 std::mutex lock;
 
 struct new_user{
@@ -51,6 +54,7 @@ void serve(struct new_user* user){
 			write(sock, (char*)packet.c_str(), (int)packet.size());
 			printf("---------- MESSAGE SENT -----------\n");
 		}
+		memset(buffer,0,BUFFER_LEN);
 	}
 
 	close(sock);

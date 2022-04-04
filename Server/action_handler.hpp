@@ -13,6 +13,10 @@ class Handler{
 
         void login_auth(std::string u, std::string p);
         void register_user(std::string u, std::string p);
+        void logout(int pos);
+        
+        void all_online();
+
     public:
         Handler(std::string buffer);
         // ~Handler();
