@@ -22,7 +22,6 @@
 
 std::vector<Location> locats;
 std::vector<User> accs;
-std::vector<User*> active_users;
 
 std::mutex lock;
 

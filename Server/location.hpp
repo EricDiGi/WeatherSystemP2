@@ -11,7 +11,9 @@ class Location{
         Location(std::string name);
         // ~Location();
         std::string getName();
-
+        bool operator==(Location& a){
+            return a.name == this->name;
+        }
 };
 
 #endif

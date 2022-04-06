@@ -23,6 +23,19 @@ bool User::new_pass(std::string p){
     return this->u_pass == p;
 }
 
+bool User::add_loc(Location l){
+    this->locations.push_back(l);
+    return this->locations[this->locations.size()-1] == l;
+}
+
 std::string User::get_name(){
     return this->u_name;
+}
+
+std::string User::get_sub_locs(){
+    std::string o;
+    for(auto &it: this->locations){
+        o += it.getName() + ":";
+    }
+    return o;
 }

@@ -27,8 +27,14 @@ Handler::Handler(std::string buffer){
         login_auth(func_ops[0],func_ops[1]);
     else if(this->cmd == "R")
         register_user(func_ops[0], func_ops[1]);
+    else if(this->cmd =="A")
+        subscribe_loc(func_ops[0], func_ops[1]);
     else if(this->cmd == "C")
         all_online();
+    else if(this->cmd == "F")
+        see_all_sub_locs(func_ops[0]);
+    else if(this->cmd == "l")
+        all_locs();
     else if(this->cmd == "H")
         change_password(func_ops[0],func_ops[1],func_ops[2]);
     else if(this->cmd == "I")
@@ -86,18 +92,45 @@ void Handler::logout(std::string pos){
 
 void Handler::all_online(){
     std::stringstream ss;
-    std::cout << ">>> accessing active list\n";
     lock.lock();
         for(auto &it: accs){
             if(it.online)
                 ss << it.get_name() << ":";
         }
-        // for(auto &it: accs){
-        //     if(it.online)
-        //         std::cout << it.get_name() << "\n";
-        // }
     lock.unlock();
     this->out = ss.str();
+}
+
+void Handler::all_locs(){
+    std::stringstream ss;
+    lock.lock();
+        int iter = 1;
+        for(auto &it: locats){
+            ss << iter << ". " << it.getName() << ":";
+            iter++;
+            // std::cout << it.getName() << '\n';
+        }
+    lock.unlock();
+    this->out = ss.str();
+}
+
+void Handler::subscribe_loc(std::string u_loc, std::string l_loc){
+    std::stringstream ss; int u, l;
+    ss << u_loc << " " << l_loc; ss >> u >> l;
+    lock.lock();
+        if(accs[u].add_loc(locats[l-1]))
+            this->out = "Now Subscribed to " + locats[l-1].getName() + "!\n";
+        else
+            this->out = "Could not subscribe\n";
+    lock.unlock();
+}
+
+void Handler::see_all_sub_locs(std::string u_loc){
+    std::stringstream ss; int u;
+    ss << u_loc; ss >> u;
+    lock.lock();
+        this->out = accs[u].get_sub_locs();
+    lock.unlock();
 }
 
 void Handler::change_password(std::string loc_, std::string old, std::string new_){

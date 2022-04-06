@@ -15,8 +15,11 @@ class Handler{
         void register_user(std::string u, std::string p);
         void logout(std::string pos);
         void change_password(std::string loc_, std::string old, std::string new_);
+        void subscribe_loc(std::string u_loc, std::string l_loc);
+        void see_all_sub_locs(std::string u_loc);
         
         void all_online();
+        void all_locs();
 
     public:
         Handler(std::string buffer);

@@ -26,6 +26,9 @@ class User{
         bool is_auth(std::string u, std::string p);
         bool new_pass(std::string p);
         
+        bool add_loc(Location l);
+        std::string get_sub_locs();
+
         std::string get_name();
 
         friend std::ostream& operator<<(std::ostream& os, const User& u){

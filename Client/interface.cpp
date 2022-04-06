@@ -85,7 +85,7 @@ bool dash(){
         std::stringstream ss;
         std::string ret;
 
-        std::cout << "Please Select an Option:\na. Subscribe to a location\nb. Unsubscribe from a location\nc. See the online users\nd. Send a message to a user\ne. Send a group message to a location\nf. See all the locations that the client has subscribed to\ng. See the last 10 messages received\nh. Change password\ni. Logout\n";
+        std::cout << "\nPlease Select an Option:\na. Subscribe to a location\nb. Unsubscribe from a location\nc. See the online users\nd. Send a message to a user\ne. Send a group message to a location\nf. See all the locations that the client has subscribed to\ng. See the last 10 messages received\nh. Change password\ni. Logout\n";
 
         char in = 0;
 
@@ -96,6 +96,41 @@ bool dash(){
         // std::cout << read() << std::endl;
 
         switch(in){
+            case 'a':
+                ss << "l#";
+                send(ss.str());
+                std::cout << "\nALL LOCATIONS:\n";
+                ss.str(read());
+                while(getline(ss,ret, ':')){
+                    std::cout << ret << "\n";
+                }
+                std::cout << "Enter Number:"; 
+                std::cin >> ret;
+                ret = "A#" + std::to_string(pos) +":"+ ret;
+                send(ret);
+                std::cout << read() << std::endl;
+                return true;
+            case 'c':
+                ss << "C#";
+                send(ss.str());
+                ss.str("");
+                ss << read();
+                std::cout << "\nALL USERS:\n";
+                while(getline(ss,ret, ':')){
+                    std::cout << ret << "\n";
+                }
+                std::cout << std::endl;
+                return true;
+            case 'f':
+                ss << "F#" << pos;
+                send(ss.str());
+                std::cout << "You are subscribed to:\n";
+                ss.str("");
+                ss << read();
+                while(getline(ss,ret, ':')){
+                    std::cout << ret << "\n";
+                }
+                return true;
             case 'h':
                 ss << "H#" << pos << ":";
                 std::cout << "Enter Old Password:"; std::cin >> ret; ss << ret << ":";
@@ -106,18 +141,6 @@ bool dash(){
             case 'i':
                 logout();
                 return false;
-            case 'c':
-                ss << "C#";
-                send(ss.str());
-                ss.str("");
-                ss << read();
-                std::string temp;
-                std::cout << "ALL USERS:\n";
-                while(getline(ss,temp, ':')){
-                    std::cout << temp << "\n";
-                }
-                std::cout << std::endl;
-                return true;
         }
     }
 }
