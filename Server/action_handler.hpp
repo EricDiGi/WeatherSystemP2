@@ -16,6 +16,7 @@ class Handler{
         void logout(std::string pos);
         void change_password(std::string loc_, std::string old, std::string new_);
         void subscribe_loc(std::string u_loc, std::string l_loc);
+        void unsubscribe_loc(std::string u_loc, std::string l_loc);
         void see_all_sub_locs(std::string u_loc);
         
         void all_online();

@@ -27,6 +27,7 @@ class User{
         bool new_pass(std::string p);
         
         bool add_loc(Location l);
+        bool rem_loc(Location l);
         std::string get_sub_locs();
 
         std::string get_name();

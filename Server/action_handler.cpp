@@ -29,6 +29,8 @@ Handler::Handler(std::string buffer){
         register_user(func_ops[0], func_ops[1]);
     else if(this->cmd =="A")
         subscribe_loc(func_ops[0], func_ops[1]);
+    else if(this->cmd =="B")
+        unsubscribe_loc(func_ops[0], func_ops[1]);
     else if(this->cmd == "C")
         all_online();
     else if(this->cmd == "F")
@@ -122,6 +124,17 @@ void Handler::subscribe_loc(std::string u_loc, std::string l_loc){
             this->out = "Now Subscribed to " + locats[l-1].getName() + "!\n";
         else
             this->out = "Could not subscribe\n";
+    lock.unlock();
+}
+
+void Handler::unsubscribe_loc(std::string u_loc, std::string l_loc){
+    std::stringstream ss; int u, l;
+    ss << u_loc << " " << l_loc; ss >> u >> l;
+    lock.lock();
+        if(accs[u].rem_loc(locats[l-1]))
+            this->out = "Successfully unsubscribed\n";
+        else
+            this->out = "Failed to unsubscribe\n";
     lock.unlock();
 }
 
