@@ -22,6 +22,7 @@
 
 std::vector<Location> locats;
 std::vector<User> accs;
+std::vector<Message> msgs;
 
 std::mutex lock;
 

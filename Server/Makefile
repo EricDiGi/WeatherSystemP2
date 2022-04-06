@@ -6,7 +6,7 @@ OBJECTS = $(SRCS: .hpp=.o)
 
 all: clean server
 
-server: $(OBJECTS) main.cpp service_thread.hpp glob.hpp location.hpp location.cpp action_handler.hpp action_handler.cpp user.hpp user.cpp
+server: $(OBJECTS) main.cpp service_thread.hpp glob.hpp location.hpp location.cpp action_handler.hpp action_handler.cpp user.hpp user.cpp message.hpp
 		$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
 
 clean:

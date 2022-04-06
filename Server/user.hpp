@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include "location.hpp"
+#include "message.hpp"
 
 class User{
 
@@ -15,6 +16,7 @@ class User{
         std::string u_name;
         std::string u_pass;
         std::vector<Location> locations;
+        std::vector<int> messages;
     public:
         bool online = false;
 
@@ -27,7 +29,12 @@ class User{
         bool new_pass(std::string p);
         
         bool add_loc(Location l);
-        bool rem_loc(Location l);
+        bool rem_loc(int l);
+        bool has_loc(Location l);
+        
+        bool add_msg(int m);
+        std::string get_msgs();
+
         std::string get_sub_locs();
 
         std::string get_name();

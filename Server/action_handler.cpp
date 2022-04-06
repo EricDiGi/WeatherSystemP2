@@ -3,6 +3,7 @@
 #include <iterator>
 #include "action_handler.hpp"
 #include "glob.hpp"
+#include "message.hpp"
 
 // incoming packets of form:
 // cmd_code#func_op1:func_op2
@@ -33,10 +34,16 @@ Handler::Handler(std::string buffer){
         unsubscribe_loc(func_ops[0], func_ops[1]);
     else if(this->cmd == "C")
         all_online();
+    else if(this->cmd == "D")
+        add_msg_usr(func_ops[0],func_ops[1],func_ops[2]);
+    else if(this->cmd == "E")
+        add_msg_loc(func_ops[0],func_ops[1],func_ops[2]);
     else if(this->cmd == "F")
         see_all_sub_locs(func_ops[0]);
     else if(this->cmd == "l")
         all_locs();
+    else if(this->cmd == "G")
+        ret_ten_msg(func_ops[0]);
     else if(this->cmd == "H")
         change_password(func_ops[0],func_ops[1],func_ops[2]);
     else if(this->cmd == "I")
@@ -110,7 +117,6 @@ void Handler::all_locs(){
         for(auto &it: locats){
             ss << iter << ". " << it.getName() << ":";
             iter++;
-            // std::cout << it.getName() << '\n';
         }
     lock.unlock();
     this->out = ss.str();
@@ -131,7 +137,7 @@ void Handler::unsubscribe_loc(std::string u_loc, std::string l_loc){
     std::stringstream ss; int u, l;
     ss << u_loc << " " << l_loc; ss >> u >> l;
     lock.lock();
-        if(accs[u].rem_loc(locats[l-1]))
+        if(accs[u].rem_loc(l-1))
             this->out = "Successfully unsubscribed\n";
         else
             this->out = "Failed to unsubscribe\n";
@@ -162,4 +168,49 @@ void Handler::change_password(std::string loc_, std::string old, std::string new
 
 std::string Handler::act(){
     return this->out;
+}
+
+void Handler::add_msg_loc(std::string u_loc, std::string l_loc, std::string content){
+    std::stringstream ss; int u,l;
+    ss << u_loc << " " << l_loc; ss >> u >> l;
+    lock.lock()
+        Message m;
+        m.id = (int)msgs.size();
+        m.content = content;
+        msgs.push_back(m);
+        for(auto &it : accs){
+            if(it.has_loc(locats[l])){
+                it.add_msg(m.id);
+            }
+        }
+    lock.unlock();
+}
+
+void Handler::add_msg_usr(std::string u_loc, std::string U_loc, std::string content){
+    std::stringstream ss; int u,U;
+    ss << u_loc; ss >> u;
+    lock.lock()
+        int iter = 0;
+        for(auto &it: accs){
+            U = (it.get_name() == U_loc) ? iter : -1;
+            iter++;
+        }
+        if(U >= 0){
+            Message m;
+            m.id = (int)msgs.size();
+            m.content = content;
+            msgs.push_back(m);
+            accs[U].add_msg(m.id);
+            this->out = "Message sent";
+        }
+        else this->out = "Could not find user >> " + U_loc;
+    lock.unlock();
+}
+
+void Handle::ret_ten_msg(std::string u_loc){
+    std::stringstream ss; int u;
+    ss << u_loc; ss >> u;
+    lock.lock()
+        this->out = accs[u].get_msgs();
+    lock.unlock();
 }

@@ -19,6 +19,10 @@ class Handler{
         void unsubscribe_loc(std::string u_loc, std::string l_loc);
         void see_all_sub_locs(std::string u_loc);
         
+        void add_msg_loc(std::string u_loc, std::string l_loc, std::string content);
+        void add_msg_usr(std::string u_loc, std::string U_loc, std::string content);
+        void ret_ten_msg(std::string u_loc);
+        
         void all_online();
         void all_locs();
 

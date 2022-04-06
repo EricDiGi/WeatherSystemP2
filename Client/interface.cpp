@@ -78,12 +78,16 @@ void logout(){
     std::cout << ret << "\n\n";
 }
 
+std::string build_msg(std::string to, std::string from){
+    
+}
 
 
 bool dash(){
     while(1){
         std::stringstream ss;
         std::string ret;
+        int iter;
 
         std::cout << "\nPlease Select an Option:\na. Subscribe to a location\nb. Unsubscribe from a location\nc. See the online users\nd. Send a message to a user\ne. Send a group message to a location\nf. See all the locations that the client has subscribed to\ng. See the last 10 messages received\nh. Change password\ni. Logout\n";
 
@@ -110,6 +114,22 @@ bool dash(){
                 send(ret);
                 std::cout << read() << std::endl;
                 return true;
+            case 'b':
+                ss << "F#" << pos;
+                send(ss.str());
+                std::cout << "You are subscribed to:\n";
+                ss.str("");
+                ss << read();
+                iter = 1;
+                while(getline(ss,ret, ':')){
+                    std::cout << iter << ". " << ret << "\n";
+                    iter++;
+                }
+                std::cout << "Enter a number: "; std::cin >> ret;
+                ret = "B#" + std::to_string(pos) + ":" + ret;
+                send(ret);
+                std::cout << read() << std::endl;
+                return true;
             case 'c':
                 ss << "C#";
                 send(ss.str());
@@ -121,6 +141,29 @@ bool dash(){
                 }
                 std::cout << std::endl;
                 return true;
+            case 'd':
+                std::cout << "Enter Recipient Username:";
+                std::cin >> ret;
+                ret = "D#" + std::to_string(pos) + ":" + ret + ":" + build_msg(std::to_string(pos),ret);
+                send(ret);
+                std::cout << read() << std::endl;
+                return true;
+            case 'e':
+                ss << "F#" << pos;
+                send(ss.str());
+                std::cout << "You are subscribed to:\n";
+                ss.str("");
+                ss << read();
+                iter = 1;
+                while(getline(ss,ret, ':')){
+                    std::cout << iter << ". " << ret << "\n";
+                    iter++;
+                }
+                std::cout << "Enter a number: "; std::cin >> ret;
+                ret = "E#" + std::to_string(pos) + ":" + ret + ":" + build_msg(std::to_string(pos),ret);
+                send(ret);
+                std::cout << read() << std::endl;
+                return true;
             case 'f':
                 ss << "F#" << pos;
                 send(ss.str());
@@ -130,6 +173,8 @@ bool dash(){
                 while(getline(ss,ret, ':')){
                     std::cout << ret << "\n";
                 }
+                return true;
+            case 'g':
                 return true;
             case 'h':
                 ss << "H#" << pos << ":";
