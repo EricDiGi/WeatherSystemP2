@@ -13,7 +13,8 @@ class Handler{
 
         void login_auth(std::string u, std::string p);
         void register_user(std::string u, std::string p);
-        void logout(int pos);
+        void logout(std::string pos);
+        void change_password(std::string loc_, std::string old, std::string new_);
         
         void all_online();
 

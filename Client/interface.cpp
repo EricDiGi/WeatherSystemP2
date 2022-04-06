@@ -59,8 +59,10 @@ void register_(){
     std::string ret = read();
     std::cout << "##" << ret << std::endl;
     std::stringstream ss(ret);
-    if(ret.substr(0,6) == "is_reg"){
+    getline(ss,ret,':');
+    if(ret == "is_reg"){
         ss >> pos;
+        std::cout << "this is loc:" << pos << "\n";
         while(dash()){};
     }
     else
@@ -68,8 +70,9 @@ void register_(){
 }
 
 void logout(){
-    std::stringstream ss("Z#");
-    ss << pos;
+    std::stringstream ss;
+    ss << "I#" << pos;
+    std::cout << ss.str() << "\n";
     send(ss.str());
     std::string ret = read();
     std::cout << ret << "\n\n";
@@ -88,11 +91,18 @@ bool dash(){
 
         std::cout << "Enter Character: ";
         std::cin >> in;
-
-        send(s+"#");
-        std::cout << read() << std::endl;
+        std::string s(1,in);
+        // send(s+"#");
+        // std::cout << read() << std::endl;
 
         switch(in){
+            case 'h':
+                ss << "H#" << pos << ":";
+                std::cout << "Enter Old Password:"; std::cin >> ret; ss << ret << ":";
+                std::cout << "Enter New Password:"; std::cin >> ret; ss << ret;
+                send(ss.str());
+                std::cout << read() << "\n";
+                return true;
             case 'i':
                 logout();
                 return false;
