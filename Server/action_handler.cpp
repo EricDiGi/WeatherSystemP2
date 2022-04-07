@@ -183,6 +183,7 @@ void Handler::add_msg_loc(std::string u_loc, std::string l_loc, std::string cont
                 it.add_msg(m.id);
             }
         }
+        this->out = "Message Sent";
     lock.unlock();
 }
 
