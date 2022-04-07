@@ -173,13 +173,13 @@ std::string Handler::act(){
 void Handler::add_msg_loc(std::string u_loc, std::string l_loc, std::string content){
     std::stringstream ss; int u,l;
     ss << u_loc << " " << l_loc; ss >> u >> l;
-    lock.lock()
-        Message m;
+    lock.lock();
+        Message m = Message();
         m.id = (int)msgs.size();
         m.content = content;
         msgs.push_back(m);
         for(auto &it : accs){
-            if(it.has_loc(locats[l])){
+            if(it.has_loc(locats[l-1])){
                 it.add_msg(m.id);
             }
         }
@@ -189,14 +189,14 @@ void Handler::add_msg_loc(std::string u_loc, std::string l_loc, std::string cont
 void Handler::add_msg_usr(std::string u_loc, std::string U_loc, std::string content){
     std::stringstream ss; int u,U;
     ss << u_loc; ss >> u;
-    lock.lock()
+    lock.lock();
         int iter = 0;
         for(auto &it: accs){
             U = (it.get_name() == U_loc) ? iter : -1;
             iter++;
         }
         if(U >= 0){
-            Message m;
+            Message m = Message();
             m.id = (int)msgs.size();
             m.content = content;
             msgs.push_back(m);
@@ -207,10 +207,10 @@ void Handler::add_msg_usr(std::string u_loc, std::string U_loc, std::string cont
     lock.unlock();
 }
 
-void Handle::ret_ten_msg(std::string u_loc){
+void Handler::ret_ten_msg(std::string u_loc){
     std::stringstream ss; int u;
     ss << u_loc; ss >> u;
-    lock.lock()
+    lock.lock();
         this->out = accs[u].get_msgs();
     lock.unlock();
 }

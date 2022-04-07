@@ -78,8 +78,11 @@ void logout(){
     std::cout << ret << "\n\n";
 }
 
-std::string build_msg(std::string to, std::string from){
-    
+std::string build_msg(std::string from, std::string to){
+    std::string msg;
+    std::cout << "Message:";
+    getline(std::cin,msg,'\n');
+    return "(from, " + from + ")(to, "+ to + ")(>> " + msg + " <<)";
 }
 
 
@@ -175,6 +178,11 @@ bool dash(){
                 }
                 return true;
             case 'g':
+                send("G#"+std::to_string(pos));
+                ss << read();
+                while(getline(ss,ret, ':')){
+                    std::cout << ret << "\n";
+                }
                 return true;
             case 'h':
                 ss << "H#" << pos << ":";
