@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <vector>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <thread>
@@ -32,9 +33,13 @@ struct new_user{
 };
 
 int active_threads = 0;
+bool do_save_on_exit = true;
 
 void serve(struct new_user* user);
 void build();
+void exit_handle();
+void save_point();
+void false_exit(std::string err);
 
 void serve(struct new_user* user){
 	lock.lock();
@@ -67,22 +72,96 @@ void serve(struct new_user* user){
 }
 
 
+void false_exit(std::string err){
+	do_save_on_exit = false;
+	perror((char*)err.c_str());
+	exit(EXIT_FAILURE);
+}
+
+
 void build(){
 	std::stringstream dbuf;
+	std::stringstream dbufa;
+	std::stringstream dbufb;
+	std::string tmp;
+	std::ifstream fs;
 
-	std::ifstream fs("BASE/locations.dat");
-	if(fs){
+	std::cout << "\n >> BUILDING <<\n";
+	std::cout << "LOCATIONS - ";
+	fs.open("BASE/locations.dat");
+	if(fs.is_open() && fs.good()){
 		dbuf << fs.rdbuf();
 		fs.close();
 	}
-	else{
-        perror("Unable to load locations");
-        exit(EXIT_FAILURE);
-    }
-
-	std::string tmp;
+	else false_exit("Unable to load locations");
 	while(getline(dbuf,tmp,'\n')){
+		std::cout << tmp << "\t";
 		locats.push_back(Location(tmp));
+	}
+	std::cout << "OK\nMESSAGES - ";
+
+	tmp = "";
+	std::ifstream fsa;
+	fsa.open("BASE/messages.dat");
+	if(fsa.is_open() && fsa.good()){
+		dbufa << fsa.rdbuf();
+		fsa.close();
+	} else false_exit("Unable to load messages");
+	while(getline(dbufa,tmp,'\n')){
+		std::cout << "new msg\t";
+		int delim_l = tmp.find((char)30);
+		Message m = Message();
+		std::stringstream sstmp;
+		sstmp << tmp.substr(0,delim_l);
+		sstmp >> m.id;
+		m.content = tmp.substr(delim_l+1,tmp.length());
+		msgs.push_back(m);
+	}
+
+	std::cout << "OK\nUSERS - ";
+	
+	std::ifstream fsb;
+	tmp = "";
+	fsb.open("BASE/users.dat");
+	if(fsb.is_open() && fsb.good()){
+		dbufb << fsb.rdbuf();
+		fsb.close();
+		std::cout << "file good\n";
+	} else false_exit("Unable to load users");
+	std::stringstream tbuf;
+	while(getline(dbufb,tmp)){
+		std::cout << tmp << std::endl;
+		User u = User();
+		tbuf << tmp;
+		tbuf >> u;
+		std::cout << "N: " << u << std::endl;
+		accs.push_back(u);
+	}
+
+	std::cout << "OK\n\n";
+}
+
+void exit_handle(){
+	if(do_save_on_exit){
+		save_point();
+		std::cout << ">>> EXIT - SAVING" << std::endl;
+	}
+	else std::cout << ">>> EXIT - NO SAVE" << std::endl;
+}
+
+void save_point(){
+	std::fstream of;
+	of.open("BASE/users.dat", std::ios::out|std::ios::trunc);
+	if(of){
+		for(auto &it:accs)
+			of << it << std::endl;
+		of.close();
+	}
+	of.open("BASE/messages.dat", std::ios::out|std::ios::trunc);
+	if(of){
+		for(auto &it:msgs)
+			of << it << std::endl;
+		of.close();
 	}
 }
 

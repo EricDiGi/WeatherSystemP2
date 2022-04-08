@@ -16,6 +16,11 @@ class Location{
         bool operator==(std::string& a){
             return a == this->name;
         }
+
+        friend std::ostream& operator<<(std::ostream& os, const Location& l){
+            os << l.name;
+            return os;
+        } 
 };
 
 #endif

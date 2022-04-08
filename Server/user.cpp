@@ -11,6 +11,13 @@ User::User(){
     this->u_pass = "";
 }
 
+User::User(std::string u, std::string p, std::vector<Location> l, std::vector<int> m){
+    this->u_name = u;
+    this->u_pass = p;
+    this->locations = l;
+    this->messages = m;
+}
+
 bool User::is_reg(){
     return (this->u_name.size() > 0 && this->u_pass.size() > 0);
 }

@@ -1,7 +1,16 @@
 #include "service_thread.hpp"
-
+#include <cstdlib>
+#include <csignal>
 
 int main(int argc, char** argv){
+
+	// Allow me to save data before exiting
+	auto ex_s = [] (int i) {if(do_save_on_exit) exit(i);};
+	std::atexit(exit_handle);
+	signal(SIGINT, ex_s);
+    signal(SIGABRT, ex_s);
+    signal(SIGTERM, ex_s);
+    signal(SIGTSTP, ex_s);
 
 	build();
 
@@ -11,6 +20,7 @@ int main(int argc, char** argv){
 
 	if((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
 		perror("Socket Error");
+		do_save_on_exit = false;
 		exit(EXIT_FAILURE);
 	}
 	
@@ -22,11 +32,13 @@ int main(int argc, char** argv){
 	
 	if(bind(server_fd, (struct sockaddr*)&address, sizeof(address))<0){
 		perror("Could not bind");
+		do_save_on_exit = false;
 		exit(EXIT_FAILURE);
 	}
 	
 	if(listen(server_fd,10) < 0){
 		perror("Could not listen");
+		do_save_on_exit = false;
 		exit(EXIT_FAILURE);
 	}
 
