@@ -11,11 +11,24 @@ User::User(){
     this->u_pass = "";
 }
 
-User::User(std::string u, std::string p, std::vector<Location> l, std::vector<int> m){
-    this->u_name = u;
-    this->u_pass = p;
-    this->locations = l;
-    this->messages = m;
+User::User(std::string T){
+    std::stringstream is(T);
+    getline(is, this->u_name, ':');
+    getline(is, this->u_pass,'/');
+    std::string l_str; std::stringstream l_buf;
+    getline(is, l_str,'/'); l_buf << l_str;
+    std::string m_str; std::stringstream m_buf;
+    getline(is, m_str,'\n'); m_buf << m_str;
+    std::cout << "MSG: " << m_str << std::endl;
+    while(getline(l_buf,l_str,':')){
+        this->locations.push_back(Location(l_str));
+    }
+    std::replace(m_str.begin(),m_str.end(),':',' ');
+    std::stringstream ss(m_str);
+    int m;
+    while(ss >> m){
+        this->messages.push_back(m);
+    }
 }
 
 bool User::is_reg(){

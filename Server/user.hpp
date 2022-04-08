@@ -23,7 +23,7 @@ class User{
 
         User();
         User(std::string u, std::string p);
-        User(std::string u, std::string p, std::vector<Location> l, std::vector<int> m);
+        User(std::string T);
         bool is_reg();
         bool is_user(std::string u);
         bool is_auth(std::string u, std::string p);
@@ -61,26 +61,9 @@ class User{
             return os;
         } 
 
-        friend std::istream& operator>>(std::istream& is, User& u){
-            getline(is, u.u_name, ':');
-            getline(is, u.u_pass,'/');
-            std::string l_str; std::stringstream l_buf;
-            getline(is, l_str,'/'); l_buf << l_str;
-            std::string m_str; std::stringstream m_buf;
-            getline(is, m_str, '\n'); m_buf << m_str;
-
-            while(getline(l_buf,l_str,':')){
-                u.locations.push_back(Location(l_str));
-            }
-            std::stringstream ss;
-            while(getline(m_buf,m_str,':')){
-                ss << l_str; int l;
-                ss >> l;
-                u.messages.push_back(l);
-            }
-
-            return is;
-        }
+        // friend std::istream& operator>>(std::istream& is, User& u){
+            
+        // }
 };
 
 

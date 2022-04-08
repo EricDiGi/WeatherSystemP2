@@ -126,14 +126,10 @@ void build(){
 	if(fsb.is_open() && fsb.good()){
 		dbufb << fsb.rdbuf();
 		fsb.close();
-		std::cout << "file good\n";
 	} else false_exit("Unable to load users");
-	std::stringstream tbuf;
-	while(getline(dbufb,tmp)){
+	while(getline(dbufb,tmp,'\n')){
 		std::cout << tmp << std::endl;
-		User u = User();
-		tbuf << tmp;
-		tbuf >> u;
+		User u = User(tmp);
 		std::cout << "N: " << u << std::endl;
 		accs.push_back(u);
 	}

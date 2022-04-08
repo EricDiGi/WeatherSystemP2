@@ -160,9 +160,9 @@ void Handler::change_password(std::string loc_, std::string old, std::string new
         if(accs[loc].is_auth(accs[loc].get_name(),old)){
             if(accs[loc].new_pass(new_))
                 this->out = "success";
-            else
-                this->out = "could not change password";
         }
+        else
+            this->out = "could not change password";
     lock.unlock();
 }
 
