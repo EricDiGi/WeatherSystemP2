@@ -35,7 +35,6 @@ void login(){
 
     send("L#"+u_name+":"+u_pass);
     std::string ret = read();
-    std::cout << "##" << ret << std::endl;
     std::stringstream ss(ret);
     std::string temp;
     getline(ss,temp, ':');
@@ -58,12 +57,10 @@ void register_(){
 
     send("R#"+u_name+":"+u_pass);
     std::string ret = read();
-    std::cout << "##" << ret << std::endl;
     std::stringstream ss(ret);
     getline(ss,ret,':');
     if(ret == "is_reg"){
         ss >> pos;
-        std::cout << "this is loc:" << pos << "\n";
         while(dash()){};
     }
     else
