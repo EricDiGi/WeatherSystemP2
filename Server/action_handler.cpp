@@ -176,10 +176,10 @@ void Handler::add_msg_loc(std::string u_loc, std::string l_loc, std::string cont
     lock.lock();
         Message m = Message();
         m.id = (int)msgs.size();
-        m.content = content;
+        m.content = "(from, " + accs[u].get_name() + ")(to, " + accs[u].get_loc(l-1).getName() +")" + content;
         msgs.push_back(m);
         for(auto &it : accs){
-            if(it.has_loc(locats[l-1])){
+            if(it.has_loc(accs[u].get_loc(l-1))){
                 it.add_msg(m.id);
             }
         }
@@ -191,15 +191,16 @@ void Handler::add_msg_usr(std::string u_loc, std::string U_loc, std::string cont
     std::stringstream ss; int u,U;
     ss << u_loc; ss >> u;
     lock.lock();
-        int iter = 0;
-        for(auto &it: accs){
-            U = (it.get_name() == U_loc) ? iter : -1;
-            iter++;
+        int i = 0;
+        for(auto &it : accs){
+            U = (U_loc == it.get_name()) ? i : -1;
+            if(U > -1) break;
+            i++;
         }
         if(U >= 0){
             Message m = Message();
             m.id = (int)msgs.size();
-            m.content = content;
+            m.content = "(from, " + accs[u].get_name() + ")(to, " + accs[U].get_name() +")" + content;
             msgs.push_back(m);
             accs[U].add_msg(m.id);
             this->out = "Message sent";

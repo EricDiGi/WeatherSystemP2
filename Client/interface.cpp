@@ -2,6 +2,7 @@
 #include "conn.hpp"
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 int pos = -1;
 
@@ -81,8 +82,9 @@ void logout(){
 std::string build_msg(std::string from, std::string to){
     std::string msg;
     std::cout << "Message:";
-    getline(std::cin,msg,'\n');
-    return "(from, " + from + ")(to, "+ to + ")(>> " + msg + " <<)";
+    getline(std::cin, msg);
+    getline(std::cin, msg);
+    return "(>> " + std::string(msg) + " <<)";
 }
 
 
@@ -147,6 +149,7 @@ bool dash(){
             case 'd':
                 std::cout << "Enter Recipient Username:";
                 std::cin >> ret;
+                ret.erase(std::remove_if(ret.begin(),ret.end(),isspace),ret.end());
                 ret = "D#" + std::to_string(pos) + ":" + ret + ":" + build_msg(std::to_string(pos),ret);
                 send(ret);
                 std::cout << read() << std::endl;
@@ -154,7 +157,7 @@ bool dash(){
             case 'e':
                 ss << "F#" << pos;
                 send(ss.str());
-                std::cout << "You are subscribed to:\n";
+                std::cout << "\nLocations:\n";
                 ss.str("");
                 ss << read();
                 iter = 1;

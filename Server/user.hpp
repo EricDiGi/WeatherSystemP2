@@ -38,6 +38,7 @@ class User{
         std::string get_sub_locs();
 
         std::string get_name();
+        Location get_loc(int l);
 
         friend std::ostream& operator<<(std::ostream& os, const User& u){
             os << ">> " << u.u_name << " :: " << u.u_pass << " <<";

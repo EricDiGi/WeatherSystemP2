@@ -24,6 +24,10 @@ bool User::new_pass(std::string p){
     return this->u_pass == p;
 }
 
+Location User::get_loc(int l){
+    return this->locations[l];
+}
+
 bool User::add_loc(Location l){
     this->locations.push_back(l);
     return this->locations[this->locations.size()-1] == l;
